@@ -1,8 +1,12 @@
 import { Stack } from "expo-router";
 import { ClerkProvider, ClerkLoaded } from "@clerk/clerk-expo";
 import * as SecureStore from "expo-secure-store";
+import { UserDetailContext } from "../context/UserDetailContext";
+import { useState } from "react";
 
 export default function RootLayout() {
+  const [userDetail, setUserDetail] = useState();
+
   const tokenCache = {
     async getToken(key) {
       try {
@@ -45,10 +49,12 @@ export default function RootLayout() {
   return (
     <ClerkProvider tokenCache={tokenCache} publishableKey={publishableKey}>
       <ClerkLoaded>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="login/index" />
-        </Stack>
+        <UserDetailContext.Provider value={{ userDetail, setUserDetail }}>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="login/index" />
+          </Stack>
+        </UserDetailContext.Provider>
       </ClerkLoaded>
     </ClerkProvider>
   );
