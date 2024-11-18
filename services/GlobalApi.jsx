@@ -8,7 +8,7 @@ const axiosClient = axios.create({
 });
 
 const GetUserInfo = (email) => {
-  return axiosClient.get("user-lists?filters[userEmail][$eq]=" + email);
+  return axiosClient.get("/user-lists?filters[userEmail][$eq]=" + email);
 };
 
 const CreateNewUser = (data) => {
@@ -17,7 +17,17 @@ const CreateNewUser = (data) => {
   });
 };
 
+const GetFeaturesCategoryList = () => {
+  return axiosClient.get("/ai-models?filters[isFeature][$eq]=true&populate=*");
+};
+
+const GetAiModels = (type) => {
+  return axiosClient.get(`/ai-models?filters[${type}][$eq]=true&populate=*`);
+};
+
 export default {
   GetUserInfo,
   CreateNewUser,
+  GetFeaturesCategoryList,
+  GetAiModels,
 };

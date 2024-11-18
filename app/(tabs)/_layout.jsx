@@ -20,7 +20,7 @@ export default function TabLayout() {
     );
 
     if (result?.data?.data?.length != 0)
-      return setUserDetail(result?.data?.data);
+      return setUserDetail(result?.data?.data[0]);
 
     try {
       const data = {
@@ -28,7 +28,7 @@ export default function TabLayout() {
         userName: user?.fullName,
       };
       const result = await GlobalApi.CreateNewUser(data);
-      setUserDetail(result?.data?.data);
+      setUserDetail(result?.data?.data[0]);
     } catch (error) {}
   };
 
