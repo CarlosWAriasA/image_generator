@@ -3,6 +3,7 @@ import { ClerkProvider, ClerkLoaded } from "@clerk/clerk-expo";
 import * as SecureStore from "expo-secure-store";
 import { UserDetailContext } from "../context/UserDetailContext";
 import { useState } from "react";
+import Toast from "react-native-toast-message";
 
 export default function RootLayout() {
   const [userDetail, setUserDetail] = useState();
@@ -54,6 +55,7 @@ export default function RootLayout() {
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="login/index" />
           </Stack>
+          <Toast />
         </UserDetailContext.Provider>
       </ClerkLoaded>
     </ClerkProvider>

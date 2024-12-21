@@ -11,7 +11,7 @@ export default function TextInput({ userInputValue, setUserInputValue }) {
         numberOfLines={4}
         multiline={true}
         value={userInputValue}
-        onChange={(value) => setUserInputValue(value)}
+        onChangeText={(value) => setUserInputValue(value)}
         editable={true}
         textAlignVertical="top"
         style={{
