@@ -4,26 +4,35 @@ import Colors from "./../../constants/Colors";
 import * as WebBrowser from "expo-web-browser";
 import { useOAuth } from "@clerk/clerk-expo";
 import * as Linking from "expo-linking";
+import { useRouter } from "expo-router";
 
 export default function LoginScreen() {
   useWarmUpBrowser();
+  const router = useRouter();
 
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
   const onPress = React.useCallback(async () => {
     try {
-      const { createdSessionId, signIn, signUp, setActive } =
-        await startOAuthFlow({
-          redirectUrl: Linking.createURL("/(tabs)/home", { scheme: "myapp" }),
-        });
+      const { createdSessionId, setActive } = await startOAuthFlow({
+        redirectUrl: Linking.createURL("/(tabs)/home", { scheme: "myapp" }),
+      });
 
       if (createdSessionId) {
-        // setActive!({ session: createdSessionId })
+        await setActive({ session: createdSessionId });
+        console.log("Session activated: ", createdSessionId);
+        router.replace("/(tabs)/home"); // Redirect after session activation
       } else {
-        // Use signIn or signUp for next steps such as MFA
+        console.log("Login successful but no session created.");
       }
     } catch (err) {
-      console.error("OAuth error", JSON.stringify(err, null, 2));
+      if (err.errors && err.errors[0].code === "session_exists") {
+        console.log("Session already exists. Redirecting to home...");
+        router.replace("/(tabs)/home");
+      } else {
+        console.log(err);
+        console.error("OAuth error", JSON.stringify(err, null, 2));
+      }
     }
   }, []);
 
